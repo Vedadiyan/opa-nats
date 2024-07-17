@@ -38,7 +38,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	subs, err := conn.QueueSubscribe("$OPA", "balanced", Handler)
+	subs, err := conn.QueueSubscribe("$OPA_AGENT", "balanced", Handler)
 	if err != nil {
 		log.Fatalln(err)
 	}
