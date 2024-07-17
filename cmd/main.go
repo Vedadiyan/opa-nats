@@ -15,6 +15,8 @@ import (
 )
 
 func main() {
+	os.Setenv("default_nats", "nats://127.0.0.1:4222")
+
 	conn, err := nats.Connect(os.Getenv("default_nats"))
 	if err != nil {
 		log.Fatalln(err)

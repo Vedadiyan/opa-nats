@@ -1,6 +1,8 @@
 package internal
 
-import "github.com/nats-io/nats.go"
+import (
+	"github.com/nats-io/nats.go"
+)
 
 var (
 	_reInitialize func() error
@@ -13,6 +15,9 @@ func Watch(kv nats.KeyValue) error {
 	}
 	go func() {
 		for update := range watcher.Updates() {
+			if update == nil {
+				continue
+			}
 			module, err := Prepare(update.Key(), update.Value())
 			if err != nil {
 				continue
@@ -28,7 +33,7 @@ func Watch(kv nats.KeyValue) error {
 func Initialize(kv nats.KeyValue) error {
 	_reInitialize = func() error {
 		keys, err := kv.Keys()
-		if err != nil {
+		if err != nil && err != nats.ErrNoKeysFound {
 			return err
 		}
 		for _, key := range keys {

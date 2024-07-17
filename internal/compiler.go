@@ -55,9 +55,11 @@ func Prepare(policyName string, definition []byte) (*Module, error) {
 }
 
 func (module *Module) Eval(ctx context.Context, input Input, store storage.Store) (map[string]map[string]any, error) {
+	mod := (*ast.Module)(module)
+	path := module.Package.Path.String()
 	rego := rego.New(
-		rego.ParsedModule((*ast.Module)(module)),
-		rego.Query(module.Package.Path.String()),
+		rego.ParsedModule(mod),
+		rego.Query(path),
 		rego.Input(input),
 		rego.Store(store),
 	)
